@@ -14,19 +14,32 @@ const gcd = (a: bigint, b: bigint): bigint => {
 };
 
 export interface Rat {
+  /** The numerator of `this` in lowest term. */
   readonly num: bigint;
+  /** The denominator of `this` in lowest term; it is always > 0. */
   readonly denom: bigint;
+  /** -1 if `this < 0`; 0 if `this = 0`; 1 if `this > 0` */
   readonly sign: -1 | 0 | 1;
+  /** Return `|this|` */
   abs(): Rat;
+  /** Return `-this` */
   neg(): Rat;
+  /** Return `1 / this` */
   inv(): Rat;
+  /** Return `this + r` */
   add(r: Rat): Rat;
+  /** Return `this - r` */
   sub(r: Rat): Rat;
+  /** Return `this * r` */
   mul(r: Rat): Rat;
+  /** Return `this / r` */
   div(r: Rat): Rat;
+  /** Return -1 if `this < r`; 0 if `this = r`; 1 if `this > r` */
   cmp(r: Rat): -1 | 0 | 1;
+  /** Return the greatest int `<= this` */
   floor(): bigint;
-  pow(a: BigIntLike): Rat;
+  /** Return the power of `this`, raised to `exp` */
+  pow(exp: BigIntLike): Rat;
 }
 
 class RatImpl implements Rat {
@@ -129,7 +142,9 @@ const stringToRat = (s: string): Rat => {
 };
 
 interface RatConstructor {
+  /** Rat("0") */
   zero: Rat;
+  /** Rat("1") */
   one: Rat;
   (s: string): Rat;
   (num: BigIntLike, denom: BigIntLike): Rat;
