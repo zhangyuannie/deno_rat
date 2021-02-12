@@ -1,4 +1,5 @@
 type BigIntLike = bigint | number | string;
+type RatLike = Rat | BigIntLike;
 
 const abs = (a: bigint): bigint => a < 0n ? -a : a;
 const cmp = (a: bigint, b: bigint) => a > b ? 1 : a === b ? 0 : -1;
@@ -27,15 +28,15 @@ export interface Rat {
   /** Return `1 / this` */
   inv(): Rat;
   /** Return `this + r` */
-  add(r: Rat): Rat;
+  add(r: RatLike): Rat;
   /** Return `this - r` */
-  sub(r: Rat): Rat;
+  sub(r: RatLike): Rat;
   /** Return `this * r` */
-  mul(r: Rat): Rat;
+  mul(r: RatLike): Rat;
   /** Return `this / r` */
-  div(r: Rat): Rat;
+  div(r: RatLike): Rat;
   /** Return -1 if `this < r`; 0 if `this = r`; 1 if `this > r` */
-  cmp(r: Rat): -1 | 0 | 1;
+  cmp(r: RatLike): -1 | 0 | 1;
   /** Return the greatest int `<= this` */
   floor(): bigint;
   /** Return the power of `this`, raised to `exp` */
@@ -81,29 +82,34 @@ class RatImpl implements Rat {
     return new RatImpl(this.denom, this.num);
   }
 
-  add(r: Rat): Rat {
+  add(r: RatLike): Rat {
+    r = Rat(r);
     return new RatImpl(
       this.num * r.denom + r.num * this.denom,
       this.denom * r.denom,
     );
   }
 
-  sub(r: Rat): Rat {
+  sub(r: RatLike): Rat {
+    r = Rat(r);
     return new RatImpl(
       this.num * r.denom - r.num * this.denom,
       this.denom * r.denom,
     );
   }
 
-  mul(r: Rat): Rat {
+  mul(r: RatLike): Rat {
+    r = Rat(r);
     return new RatImpl(this.num * r.num, this.denom * r.denom);
   }
 
-  div(r: Rat): Rat {
+  div(r: RatLike): Rat {
+    r = Rat(r);
     return new RatImpl(this.num * r.denom, this.denom * r.num);
   }
 
-  cmp(r: Rat): -1 | 0 | 1 {
+  cmp(r: RatLike): -1 | 0 | 1 {
+    r = Rat(r);
     const leftSign = this.sign;
     const rightSign = r.sign;
 
@@ -146,9 +152,8 @@ interface RatConstructor {
   zero: Rat;
   /** Rat("1") */
   one: Rat;
-  (value: BigIntLike): Rat;
+  (value: RatLike): Rat;
   (num: BigIntLike, denom: BigIntLike): Rat;
-  (rat: Rat): Rat;
   isRat(r: unknown): r is Rat;
 }
 

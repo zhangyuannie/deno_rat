@@ -37,6 +37,11 @@ Deno.test("[constructor] should throw when the denominator is zero", () => {
   assertThrows(() => Rat(1, 0));
 });
 
+Deno.test("[constructor] should throw when the arguments are invalid", () => {
+  assertThrows(() => Rat(true as unknown as number));
+  assertThrows(() => Rat(Math.PI));
+});
+
 Deno.test("[constructor] should work with integers", () => {
   assertEquals(Rat(123), Rat("123"));
   assertEquals(Rat(321n), Rat("321/1"));
@@ -65,25 +70,25 @@ Deno.test("[inv] should work", () => {
 
 Deno.test("[add] should work", () => {
   assertEquals(Rat("2/3").add(Rat("1/2")), Rat("7/6"));
-  assertEquals(Rat("2/3").add(Rat("1/3")), Rat("1"));
+  assertEquals(Rat("2/3").add("1/3"), Rat("1"));
 });
 
 Deno.test("[sub] should work", () => {
-  assertEquals(Rat("2/3").sub(Rat("1/2")), Rat("1/6"));
+  assertEquals(Rat("2/3").sub("1/2"), Rat("1/6"));
 });
 
 Deno.test("[mul] should work", () => {
-  assertEquals(Rat("2/3").mul(Rat("1/2")), Rat("2/6"));
+  assertEquals(Rat("2/3").mul("1/2"), Rat("2/6"));
 });
 
 Deno.test("[div] should work", () => {
-  assertEquals(Rat("2/3").div(Rat("1/2")), Rat("4/3"));
+  assertEquals(Rat("2/3").div("1/2"), Rat("4/3"));
 });
 
 Deno.test("[cmp] should work", () => {
   assertEquals(Rat("2/3").cmp(Rat("1/2")), 1);
-  assertEquals(Rat("2/3").cmp(Rat("1")), -1);
-  assertEquals(Rat("2/3").cmp(Rat("2/3")), 0);
+  assertEquals(Rat("2/3").cmp(1), -1);
+  assertEquals(Rat("2/3").cmp("2/3"), 0);
   assertEquals(Rat("1/3").cmp(Rat("2/3")), -1);
   assertEquals(Rat("-2/3").cmp(Rat("2/3")), -1);
 });
