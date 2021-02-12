@@ -146,17 +146,26 @@ interface RatConstructor {
   zero: Rat;
   /** Rat("1") */
   one: Rat;
-  (s: string): Rat;
+  (value: BigIntLike): Rat;
   (num: BigIntLike, denom: BigIntLike): Rat;
   (rat: Rat): Rat;
   isRat(r: unknown): r is Rat;
 }
 
 export const Rat: RatConstructor = (a: unknown, b?: unknown) => {
-  if (b) return new RatImpl(a, b);
+  if (b != null) return new RatImpl(a, b);
   if (isRat(a)) return a;
   if (typeof a === "string") return stringToRat(a);
-  throw new TypeError();
+  if (typeof a === "bigint") return new RatImpl(a, 1);
+
+  if (typeof a === "number") {
+    if (Number.isInteger(a)) {
+      return new RatImpl(a, 1);
+    }
+    throw new RangeError("Only integers are supported");
+  }
+
+  throw new TypeError("Invalid arguments");
 };
 
 Rat.isRat = isRat;
