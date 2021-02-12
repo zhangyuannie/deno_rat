@@ -10,10 +10,10 @@
 import { Rat } from "https://deno.land/x/rat/mod.ts";
 
 0.1 + 0.2;                              // 0.30000000000000004
-Rat("0.1").add(Rat("0.2"));             // 3/10
+Rat("0.1").add("0.2");                  // 3/10
 
 1 / 49 * 49;                            // 0.9999999999999999
-Rat("1").div(Rat("49")).mul(Rat("49")); // 1/1
+Rat("1").div(49).mul(49); // 1/1
 ```
 
 ### Create a new instance of Rat
@@ -47,15 +47,15 @@ interface RatInstance {
   /** Return `1 / this` */
   inv(): Rat;
   /** Return `this + r` */
-  add(r: Rat): Rat;
+  add(r: Rat | bigint | number | string): Rat;
   /** Return `this - r` */
-  sub(r: Rat): Rat;
+  sub(r: Rat | bigint | number | string): Rat;
   /** Return `this * r` */
-  mul(r: Rat): Rat;
+  mul(r: Rat | bigint | number | string): Rat;
   /** Return `this / r` */
-  div(r: Rat): Rat;
+  div(r: Rat | bigint | number | string): Rat;
   /** Return -1 if `this < r`; 0 if `this = r`; 1 if `this > r` */
-  cmp(r: Rat): -1 | 0 | 1;
+  cmp(r: Rat | bigint | number | string): -1 | 0 | 1;
   /** Return the greatest int `<= this` */
   floor(): bigint;
   /** Return the power of `this`, raised to `exp` */
@@ -69,9 +69,8 @@ interface RatConstructor {
   zero: Rat;
   /** Rat("1") */
   one: Rat;
-  (s: string): Rat;
+  (value: Rat | bigint | number | string): Rat;
   (num: bigint | number | string, denom: bigint | number | string): Rat;
-  (rat: Rat): Rat;
   isRat(r: unknown): r is Rat;
 }
 ```
